@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <nav
+      th:fragment="navbar"
+      class="navbar navbar-expand-lg navbar-dark custom-navbar"
+    >
+      <div class="container-fluid">
+        <span class="navbar-brand"> <span class="material-symbols-outlined" style="vertical-align: bottom;">home</span> Smart Kost </span>
+
+        <div class="dropdown">
+          <button
+            class="btn btn-light dropdown-toggle"
+            data-bs-toggle="dropdown"
+          >
+            <span id="userName"> User </span>
+          </button>
+
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item"> Profile </a>
+            </li>
+
+            <li>
+              <a class="dropdown-item"> Logout </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>

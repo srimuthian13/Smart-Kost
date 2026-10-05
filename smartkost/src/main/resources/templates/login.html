@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Smart Kost</title>
+  <meta name="description" content="Masuk ke platform manajemen kost Smart Kost" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/login.css" />
+</head>
+
+<body>
+  <!-- LEFT PANEL -->
+  <div class="auth-left">
+    <div class="brand">
+      <div class="brand-icon">
+        <span class="material-symbols-outlined">home</span>
+      </div>
+      <div>
+        <div class="brand-name">Smart Kost</div>
+        <div class="brand-sub">Kost Management System</div>
+      </div>
+    </div>
+    <h1>Kost-an Putri<br />terpercaya di Bandung</h1>
+    <div class="auth-features">
+      <div class="auth-feature-item">
+        <div class="fi-icon">🏠</div>
+        <div>
+          <div class="fi-text">Kelola Kost Lebih Mudah</div>
+          <div class="fi-sub">
+            Atur kamar, tenant, pembayaran, dan pengaduan dalam satu sistem.
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-feature-item">
+        <div class="fi-icon">💰</div>
+        <div>
+          <div class="fi-text">Pembayaran Terintegrasi</div>
+          <div class="fi-sub">
+            Upload bukti pembayaran, verifikasi admin, dan riwayat transaksi tersimpan rapi.
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-feature-item">
+        <div class="fi-icon">📈</div>
+        <div>
+          <div class="fi-text">Monitoring Kost</div>
+          <div class="fi-sub">
+            Pantau status kamar, tenant aktif, dan tagihan bulanan secara real-time.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+      <!-- Back to Dashboard / Beranda Button -->
+      <div class="back-home-wrap">
+        <a href="/" class="back-home-btn">
+          <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
+        </a>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">
+          Masuk
+        </button>
+        <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">
+          Daftar
+        </button>
+      </div>
+
+      <!-- ===== LOGIN PANEL ===== -->
+      <div class="auth-panel active" id="panelLogin">
+        <h2 class="auth-heading">Selamat Datang Kembali!</h2>
+        <p class="auth-subhead">
+          Masuk ke akun Anda untuk mengakses dashboard
+        </p>
+
+        <div class="alert alert-danger hidden" id="loginError">
+          <span class="alert-icon">error</span>
+          <span id="loginErrorMsg">Email atau password salah.</span>
+        </div>
+        <div class="alert alert-success hidden" id="loginSuccess">
+          <span class="alert-icon">check_circle</span>
+          <span id="loginSuccessMsg">Login berhasil! Mengalihkan...</span>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Alamat Email</label>
+            <div class="input-icon-wrap">
+              <input class="form-input" id="loginEmail" type="email" placeholder="email@smartkost.com" required />
+              <span class="icon">mail</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <div class="input-icon-wrap input-toggle">
+              <input class="form-input" id="loginPassword" type="password" placeholder="Masukkan password" required />
+              <span class="icon">lock</span>
+              <button type="button" class="toggle-pw" id="toggleLoginPw"
+                onclick="togglePassword('loginPassword', 'toggleLoginPw')">
+                visibility
+              </button>
+            </div>
+          </div>
+          <div class="remember-row">
+            <label><input type="checkbox" id="rememberMe" /> Ingat saya</label>
+          </div>
+          <button type="submit" class="auth-btn" id="loginBtn">
+            <span class="loader" id="loginLoader"></span>
+            <span id="loginBtnText">Masuk</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- ===== REGISTER PANEL ===== -->
+      <div class="auth-panel" id="panelRegister">
+        <h2 class="auth-heading">Buat Akun Baru</h2>
+        <p class="auth-subhead">
+          Daftarkan diri Anda untuk mulai menggunakan Smart Kost
+        </p>
+
+        <div class="alert alert-danger hidden" id="regError">
+          <span class="alert-icon">error</span>
+          <span id="regErrorMsg">Pendaftaran gagal.</span>
+        </div>
+        <div class="alert alert-success hidden" id="regSuccess">
+          <span class="alert-icon">check_circle</span>
+          <span>Pendaftaran berhasil! Silakan masuk.</span>
+        </div>
+
+        <form id="registerForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="regUsername">Username</label>
+              <div class="input-icon-wrap">
+                <input class="form-input" id="regUsername" type="text" placeholder="username" required minlength="3" />
+                <span class="icon">person</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPhone">No. HP</label>
+              <div class="input-icon-wrap">
+                <input class="form-input" id="regPhone" type="tel" placeholder="08xx" />
+                <span class="icon">phone</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Alamat Email</label>
+            <div class="input-icon-wrap">
+              <input class="form-input" id="regEmail" type="email" placeholder="email@smartkost.com" required />
+              <span class="icon">mail</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Password</label>
+            <div class="input-icon-wrap input-toggle">
+              <input class="form-input" id="regPassword" type="password" placeholder="Min. 8 karakter" required
+                minlength="8" />
+              <span class="icon">lock</span>
+              <button type="button" class="toggle-pw" id="toggleRegPw"
+                onclick="togglePassword('regPassword', 'toggleRegPw')">
+                visibility
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regConfirm">Konfirmasi Password</label>
+            <div class="input-icon-wrap input-toggle">
+              <input class="form-input" id="regConfirm" type="password" placeholder="Ulangi password" required />
+              <span class="icon">lock_reset</span>
+              <button type="button" class="toggle-pw" id="toggleRegConfirm"
+                onclick="togglePassword('regConfirm', 'toggleRegConfirm')">
+                visibility
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="auth-btn" id="regBtn">
+            <span class="loader" id="regLoader"></span>
+            <span id="regBtnText">Daftar Sekarang</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/login.js"></script>
+</body>
+
+</html>

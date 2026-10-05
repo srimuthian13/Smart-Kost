@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulasi Pembayaran QRIS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f4f6f4; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .card { background: white; max-width: 400px; width: 100%; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); text-align: center; }
+    .header { font-size: 20px; font-weight: 700; color: #333; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .amount { font-size: 32px; font-weight: 800; color: #698260; margin: 20px 0; }
+    .details { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: left; }
+    .details div { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+    .details div:last-child { margin-bottom: 0; }
+    .label { color: #666; }
+    .value { font-weight: 600; color: #333; }
+    .btn { background: #698260; color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: inherit; }
+    .btn:hover { background: #4A5B43; }
+    .success-icon { display: none; color: #698260; font-size: 64px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+<div class="card" id="mainCard">
+  <div class="header">
+    <span class="material-symbols-outlined" style="color:#00569c">qr_code_scanner</span> QRIS Payment
+  </div>
+  
+  <div id="successView" style="display:none;">
+    <span class="material-symbols-outlined success-icon" style="display:inline-block">check_circle</span>
+    <h2 style="margin-top:0">Pembayaran Berhasil!</h2>
+    <p style="color:#666; font-size: 14px;">Silakan screenshot layar ini dan unggah sebagai bukti pembayaran pada dashboard Anda.</p>
+  </div>
+
+  <div id="paymentView">
+    <p style="color: #666; font-size: 14px; margin: 0;">Total Tagihan Pembayaran</p>
+    <div class="amount" id="payAmount">Rp 0</div>
+    
+    <div class="details">
+      <div><span class="label">Merchant</span> <span class="value">Smart Kost</span></div>
+      <div><span class="label">Metode</span> <span class="value">QRIS</span></div>
+      <div><span class="label">ID Invoice</span> <span class="value" id="payId">-</span></div>
+    </div>
+    
+    <button class="btn" onclick="simulatePay()">Bayar Sekarang</button>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const paymentId = params.get('paymentId');
+  
+  if (paymentId) {
+    document.getElementById('payId').innerText = 'INV-' + paymentId;
+    fetch(`http://localhost:8080/api/payments/${paymentId}`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('payAmount').innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.amount);
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('payAmount').innerText = 'Rp 0';
+      });
+  } else {
+    document.getElementById('payId').innerText = '-';
+  }
+  
+  async function simulatePay() {
+    const btn = document.querySelector('.btn');
+    btn.innerText = 'Memproses...';
+    btn.disabled = true;
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/payments/${paymentId}/qris-pay`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        document.getElementById('paymentView').style.display = 'none';
+        document.getElementById('successView').style.display = 'block';
+      } else {
+        alert('Gagal memproses pembayaran. Coba lagi.');
+        btn.innerText = 'Bayar Sekarang';
+        btn.disabled = false;
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Terjadi kesalahan jaringan.');
+      btn.innerText = 'Bayar Sekarang';
+      btn.disabled = false;
+    }
+  }
+</script>
+
+</body>
+</html>

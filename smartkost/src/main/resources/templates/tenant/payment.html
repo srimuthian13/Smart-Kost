@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pembayaran Tagihan — Smart Kost</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/css/smartkost.css}"/>
+  <link rel="stylesheet" th:href="@{/css/tenant-payment.css}"/>
+</head>
+<body>
+
+<div class="sk-topbar" style="position:static">
+  <a href="/" class="sk-topbar-title" style="text-decoration: none; color: inherit;">Smart Kost</a>
+  <div class="sk-topbar-right">
+    <a href="/dashboard/tenant" class="sk-btn sk-btn-outline sk-btn-sm"><span class="material-symbols-outlined" style="font-size:16px">arrow_back</span> Kembali ke Dashboard</a>
+  </div>
+</div>
+
+<div class="payment-layout">
+  <div class="sk-card">
+    <div class="sk-card-header" style="flex-direction:column;align-items:flex-start;gap:8px;padding:24px 32px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="material-symbols-outlined" style="font-size:32px;color:var(--primary)">payments</span>
+        <div>
+          <h1 style="font-size:24px;font-weight:800;color:var(--text-primary)">Pembayaran Tagihan</h1>
+          <p style="color:var(--text-muted);font-size:14px">Selesaikan pembayaran untuk bulan ini</p>
+        </div>
+      </div>
+    </div>
+    <div class="sk-card-body" style="padding:32px">
+      
+      <div class="sk-grid-2">
+        <!-- INVOICE INFO -->
+        <div style="grid-column: 1 / -1; margin-bottom: 24px; padding: 16px; background: rgba(201,166,107,0.1); border-radius: 8px; border: 1px solid rgba(201,166,107,0.3); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h4 style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">Total Tagihan</h4>
+            <div id="displayAmount" style="font-size: 24px; font-weight: 800; color: var(--primary);">Loading...</div>
+          </div>
+          <div style="text-align: right;">
+            <h4 style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">Jatuh Tempo</h4>
+            <div id="displayDueDate" style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Loading...</div>
+          </div>
+        </div>
+
+        <!-- METHOD -->
+        <div>
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:16px">1. Metode Pembayaran</h3>
+          <select id="payMethod" class="sk-form-control" style="margin-bottom: 16px; padding: 10px; width: 100%; border-radius: 8px; border: 1px solid var(--border);" onchange="toggleMethod()">
+            <option value="Transfer Bank">Transfer Bank</option>
+            <option value="QRIS">QRIS</option>
+          </select>
+
+          <div id="bankSection" class="qris-box">
+            <h4 style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:16px">Transfer Bank</h4>
+            <div style="text-align:left;background:var(--surface-alt);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border)">
+              <div style="margin-bottom:12px">
+                <div style="font-size:11px;color:var(--text-muted)">BCA</div>
+                <div style="font-size:16px;font-weight:700">8877 6655 44 <span style="font-size:12px;font-weight:400">(a.n Smart Kost)</span></div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text-muted)">Mandiri</div>
+                <div style="font-size:16px;font-weight:700">137 00 11223344 <span style="font-size:12px;font-weight:400">(a.n Smart Kost)</span></div>
+              </div>
+            </div>
+            <p style="font-size:13px;color:var(--text-muted);margin-top:16px">Pastikan transfer sesuai nominal tagihan hingga 3 digit terakhir.</p>
+          </div>
+          
+          <div id="qrisSection" class="qris-box" style="display:none; text-align:center;">
+            <h4 style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:16px">Scan QRIS</h4>
+            <div style="background: white; padding: 16px; border-radius: 8px; display: inline-block; border: 1px solid var(--border);">
+              <img id="qrisImg" src="" alt="Loading QR..." style="width: 250px; height: 250px; object-fit: contain;" />
+            </div>
+            <p style="font-size:13px;color:var(--text-muted);margin-top:16px">Silakan <b>klik gambar QR di atas</b> atau scan jika menggunakan HP untuk melakukan simulasi pembayaran.</p>
+          </div>
+        </div>
+
+        <!-- UPLOAD -->
+        <div>
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:16px">2. Upload Bukti</h3>
+          
+          <div class="sk-alert sk-alert-warning">
+            <span class="icon material-symbols-outlined">info</span>
+            <span>Anda harus mengupload bukti transfer agar pembayaran dapat diverifikasi oleh admin.</span>
+          </div>
+
+          <form id="uploadForm">
+            <input type="hidden" id="invoiceId" />
+            
+            <div class="file-drop" onclick="document.getElementById('proofFile').click()">
+              <span class="material-symbols-outlined">cloud_upload</span>
+              <div style="font-size:14px;font-weight:600;color:var(--primary)">Klik untuk memilih file</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Semua tipe file maksimal 5MB</div>
+              <input type="file" id="proofFile" style="display:none" onchange="previewFile(event)" required />
+            </div>
+            <img id="previewImg" style="max-height: 200px; display: none; margin: 16px auto 0;" />
+            <div id="fileNamePreview" style="font-size: 13px; color: var(--text-primary); text-align: center; margin-top: 8px; font-weight: 500;"></div>
+
+            <button type="submit" class="sk-btn sk-btn-primary sk-btn-lg" id="btnSubmit" style="width:100%;margin-top:24px;justify-content:center">
+              <span class="material-symbols-outlined">cloud_upload</span> Upload Bukti Pembayaran
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="sk-toast-container" id="toastContainer"></div>
+
+<script th:src="@{/js/tenant-payment.js}"></script>
+</body>
+</html>

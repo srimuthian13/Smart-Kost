@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Kost - Solusi Cerdas Sewa Kamar Kost</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/index.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar shadow-soft">
+      <a href="/" class="brand">
+        <span class="material-symbols-outlined" style="font-size: 28px; color: var(--primary)">domain</span>
+        Smart Kost
+      </a>
+      <button class="nav-toggle" id="navToggle">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#fitur">Keunggulan</a>
+        <a href="#kamar">Galeri Kamar</a>
+        <a href="#lokasi">Lokasi</a>
+        <a href="#tentang">Tentang Kami</a>
+        <div id="authNavLinks" style="display: flex; align-items: center; gap: 16px; margin-left: 16px;">
+          <a href="/login" style="text-decoration: none; font-weight: 600; color: var(--text-primary);" class="nav-link-auth">Masuk</a>
+          <a href="/register" class="btn btn-primary" style="border-radius: 999px; padding: 10px 24px;">Daftar</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+      <div class="hero-content">
+        <h1>Solusi Sewa Kost Murah, Mudah, dan Terpercaya</h1>
+        <p>
+          Temukan kamar kost yang nyaman dan kelola pembayaran Anda dengan mudah
+          dalam satu platform yang terintegrasi secara pintar.
+        </p>
+        <div class="hero-actions">
+          <a href="#kamar" class="btn btn-primary" style="border-radius: 999px; padding: 14px 28px; font-size: 16px;">Lihat Kamar Tersedia</a>
+          <a href="#fitur" class="btn btn-outline" style="border-radius: 999px; padding: 14px 28px; font-size: 16px;">Pelajari Fasilitas</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kamar Kost Modern" />
+      </div>
+    </header>
+
+    <!-- Features -->
+    <section id="fitur" class="features">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="material-symbols-outlined">payments</span>
+        </div>
+        <h3>Pembayaran Mudah</h3>
+        <p>
+          Pembayaran dilakukan dengan Transfer Bank,
+          terverifikasi setelah Anda unggah bukti transfer.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="material-symbols-outlined">support_agent</span>
+        </div>
+        <h3>Layanan Cepat</h3>
+        <p>
+          Sistem komplain online memungkinkan Anda melaporkan masalah langsung
+          dari dashboard penghuni ke admin dengan respon cepat.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="material-symbols-outlined">verified_user</span>
+        </div>
+        <h3>Lokasi Aman & Strategis</h3>
+        <p>
+          Dilengkapi dengan CCTV membantu memantau aktivitas
+          di sekitar Kos, 
+        </p>
+      </div>
+    </section>
+
+    <!-- Gallery / Rooms -->
+    <section id="kamar" class="rooms">
+      <h2 class="section-title">Kamar Tersedia</h2>
+      <p class="section-subtitle">
+        Temukan kamar impian Anda, klik Lihat detail untuk mengetahui lebih
+        lanjut.
+      </p>
+      <div class="room-grid" id="roomGallery"></div>
+    </section>
+
+    <!-- Lokasi Section -->
+    <section id="lokasi" class="location-section">
+      <h2 class="section-title">Lokasi dan Lingkungan Sekitar</h2>
+      <p class="section-subtitle">
+        Akses mudah ke berbagai fasilitas umum, perkantoran, kampus, serta pintu masuk Tol
+        terdekat.
+      </p>
+      <div class="map-container">
+        <iframe
+          src="https://maps.google.com/maps?q=Universitas%20Nasional%20PASIM%20Bandung&t=&z=15&ie=UTF8&iwloc=&output=embed"
+          width="100%"
+          height="450"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </section>
+
+    <!-- Tentang Kos Section -->
+    <h2 class="section-title">Fasilitas & Peraturan Penghuni Kost</h2>
+    <section
+      id="tentang"
+      class="features"
+      style="background-color: var(--bg-light)"
+    >
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="material-symbols-outlined">home</span>
+        </div>
+        <h3>Tentang Smart Kost</h3>
+        <p>
+          Kami adalah hunian modern yang mengutamakan kenyamanan, keamanan, dan
+          privasi penghuni. Dikelola langsung oleh pemilik yang berpengalaman
+          untuk memberikan pelayanan terbaik bagi para mahasiswa dan pekerja.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="material-symbols-outlined">chair</span>
+        </div>
+        <h3>Fasilitas Umum</h3>
+        <p>
+          Menyediakan area parkir luas, dapur bersama & kulkas, ruang jemur,
+          CCTV 24 jam dengan akses sidik jari, serta ruang tamu yang nyaman
+          untuk bersantai.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <span class="material-symbols-outlined">rule</span>
+        </div>
+        <h3>Peraturan Kos</h3>
+        <p>
+          Dilarang membawa hewan peliharaan, tamu lawan jenis dilarang masuk
+          kamar, jam batas bertamu pukul 22.00 WIB, serta wajib menjaga
+          kebersihan dan ketenangan bersama.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div
+        style="
+          font-size: 24px;
+          font-weight: 800;
+          margin-bottom: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        "
+      >
+        <span class="material-symbols-outlined">home</span> Smart Kost
+      </div>
+      <p>&copy; 2026 Smart Kost Management System. All rights reserved.</p>
+    </footer>
+
+    <!-- Modal Detail Kamar -->
+    <div id="roomDetailModal" class="custom-modal">
+      <div class="custom-modal-content">
+        <div class="custom-modal-header">
+          <h3 class="custom-modal-title" id="detailTitle">Detail Kamar</h3>
+          <button
+            class="custom-modal-close"
+            onclick="closeModal('roomDetailModal')"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="custom-modal-body" id="detailBody">
+          <!-- Rendered dynamically -->
+        </div>
+        <div class="custom-modal-footer">
+          <a
+            id="detailWaBtn"
+            href="#"
+            target="_blank"
+            class="btn btn-outline"
+            style="justify-content: center"
+            ><i class="fa-brands fa-whatsapp"></i> Tanya Pemilik</a
+          >
+          <button
+            id="detailSewaBtn"
+            onclick="handleRentClick()"
+            class="btn btn-primary"
+            style="justify-content: center"
+          >
+            Ajukan Sewa
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Ajukan Sewa -->
+    <div id="rentModal" class="custom-modal">
+      <div class="custom-modal-content">
+        <div class="custom-modal-header">
+          <h3 class="custom-modal-title">Formulir Pengajuan Sewa</h3>
+          <button class="custom-modal-close" onclick="closeModal('rentModal')">
+            &times;
+          </button>
+        </div>
+        <form id="rentForm">
+          <div class="custom-modal-body">
+            <div
+              id="rentAlert"
+              class="alert alert-danger"
+              style="
+                display: none;
+                background: rgba(185, 28, 28, 0.15);
+                color: #ff6b6b;
+                padding: 12px;
+                border-radius: 4px;
+                border: 1px solid #b91c1c;
+                margin-bottom: 16px;
+                font-size: 13.5px;
+              "
+            ></div>
+
+            <input type="hidden" id="rentRoomId" />
+            <input type="hidden" id="rentRoomPrice" />
+            <input type="hidden" id="rentRoomNumber" />
+            <input type="hidden" id="rentRoomType" />
+
+            <div
+              style="
+                background: rgba(201, 166, 107, 0.08);
+                padding: 16px;
+                border-radius: 4px;
+                border: 1px solid var(--border);
+                margin-bottom: 20px;
+              "
+            >
+              <div
+                style="
+                  font-size: 11px;
+                  color: var(--text-secondary);
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                  font-weight: 700;
+                "
+              >
+                Kamar yang diajukan
+              </div>
+              <div
+                id="rentRoomSummary"
+                style="
+                  font-size: 16px;
+                  font-weight: 700;
+                  color: var(--text-primary);
+                  margin-top: 4px;
+                "
+              >
+                Kamar A-101 (Tipe Standard) — Rp 800.000 / bulan
+              </div>
+            </div>
+
+            <div class="custom-form-group">
+              <label class="custom-form-label"
+                >Nama Lengkap <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                id="rentName"
+                class="custom-form-control"
+                placeholder="Masukkan nama lengkap sesuai KTP"
+                required
+              />
+            </div>
+
+            <div class="custom-form-group">
+              <label class="custom-form-label"
+                >Nomor Telepon / WA <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                id="rentPhone"
+                class="custom-form-control"
+                placeholder="Contoh: 0812xxxxxxxx"
+                required
+              />
+            </div>
+
+            <div class="custom-form-group">
+              <label class="custom-form-label"
+                >Nomor NIK <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                id="rentNik"
+                class="custom-form-control"
+                placeholder="Masukkan 16 digit NIK"
+                maxlength="16"
+                required
+              />
+            </div>
+
+            <div class="custom-form-group">
+              <label class="custom-form-label">Alamat Asal</label>
+              <textarea
+                id="rentAddress"
+                class="custom-form-control"
+                rows="2"
+                placeholder="Alamat lengkap asal Anda"
+              ></textarea>
+            </div>
+
+            <div class="custom-form-group">
+              <label class="custom-form-label"
+                >Pekerjaan <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                id="rentOccupation"
+                class="custom-form-control"
+                placeholder="Contoh: Karyawan"
+                required
+              />
+            </div>
+
+            <div class="custom-form-group">
+              <label class="custom-form-label"
+                >Durasi Sewa <span style="color: red">*</span></label
+              >
+              <select
+                id="rentDuration"
+                class="custom-form-control"
+                style="background-color: var(--primary-dark)"
+                required
+              >
+                <option value="1">1 Bulan</option>
+                <option value="3">3 Bulan</option>
+                <option value="6">6 Bulan</option>
+                <option value="12">12 Bulan</option>
+              </select>
+            </div>
+          </div>
+          <div class="custom-modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline"
+              onclick="closeModal('rentModal')"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              id="btnRentSubmit"
+              style="justify-content: center"
+            >
+              Kirim Pengajuan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/js/index.js"></script>
+  </body>
+</html>

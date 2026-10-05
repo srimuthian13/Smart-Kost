@@ -1,0 +1,26 @@
+.tenant-header-card {
+  background: linear-gradient(135deg, var(--info) 0%, #115383 100%);
+  color: #fff; border-radius: var(--radius-xl);
+  padding: 32px; display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.tenant-header-card::before {
+  content: ''; position: absolute; right: -40px; top: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,.1); pointer-events: none;
+}
+.tenant-info h2 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+.tenant-info p { font-size: 14px; opacity: .8; }
+.room-badge {
+  background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3);
+  padding: 12px 24px; border-radius: var(--radius-lg);
+  text-align: center; backdrop-filter: blur(8px);
+}
+.room-badge .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: .8; margin-bottom: 4px; }
+.room-badge .val { font-size: 24px; font-weight: 800; }
+
+.bill-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; text-align: center; }
+.bill-card .icon { width: 56px; height: 56px; background: var(--warning-bg); color: var(--warning); border-radius: 50%; display: grid; place-items: center; font-size: 28px; margin: 0 auto 16px; }
+.bill-card.paid .icon { background: var(--success-bg); color: var(--success); }
+.bill-card h3 { font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+.bill-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }

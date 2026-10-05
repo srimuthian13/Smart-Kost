@@ -1,0 +1,43 @@
+.avatar-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff; display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.progress-bar-wrap { background: var(--border-light); border-radius: 99px; height: 6px; flex: 1; }
+.progress-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+.room-status-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.room-status-dot.available { background: var(--success); }
+.room-status-dot.occupied  { background: var(--primary); }
+.room-status-dot.maintain  { background: var(--warning); }
+.mini-chart { max-height: 200px; }
+.filter-chip {
+  padding: 5px 14px; border-radius: var(--radius-full);
+  border: 1.5px solid var(--border); background: var(--surface);
+  font-size: 12px; font-weight: 600; color: var(--text-muted);
+  cursor: pointer; transition: all var(--transition); font-family: inherit;
+}
+.filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.proof-img {
+  width: 60px; height: 60px; object-fit: cover;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+  cursor: pointer; transition: transform var(--transition);
+}
+.proof-img:hover { transform: scale(1.1); box-shadow: var(--shadow-md); }
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,.6); z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+.modal-box {
+  background: var(--surface); width: 90%; max-width: 500px;
+  border-radius: var(--radius-lg); padding: 24px;
+  transform: translateY(20px); transition: transform .3s ease;
+}
+.modal-overlay.active .modal-box { transform: translateY(0); }
+.modal-img-preview { width: 100%; max-height: 60vh; object-fit: contain; margin-bottom: 20px; border-radius: var(--radius-sm); background: var(--bg); }
+.modal-actions { display: flex; gap: 12px; justify-content: flex-end; }

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Kamar — Smart Kost</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/rooms.css}">
+</head>
+<body>
+
+<div class="rooms-container">
+
+    <!-- Header -->
+    <div class="rooms-header">
+        <div class="d-flex align-items-center gap-3">
+            <a href="javascript:history.back()" class="btn-back" title="Kembali">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </a>
+            <div>
+                <h1 class="page-title"><i class="fa-solid fa-door-open" style="margin-right: 6px; font-size: 22px; color: var(--primary);"></i> Manajemen Kamar</h1>
+                <p class="page-subtitle">Kelola seluruh kamar Smart Kost</p>
+            </div>
+        </div>
+        <button id="btnAddRoomTop" class="btn-add-room" data-bs-toggle="modal" data-bs-target="#addRoomModal">
+            <span class="material-symbols-outlined">add</span> Tambah Kamar
+        </button>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="stat-card">
+                <div class="stat-icon brown"><span class="material-symbols-outlined">meeting_room</span></div>
+                <div>
+                    <div class="stat-label">Total Kamar</div>
+                    <h3 class="stat-value" id="totalRooms">—</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card">
+                <div class="stat-icon green"><span class="material-symbols-outlined">door_open</span></div>
+                <div>
+                    <div class="stat-label">Kamar Kosong</div>
+                    <h3 class="stat-value" id="availableRooms">—</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card">
+                <div class="stat-icon blue"><span class="material-symbols-outlined">person</span></div>
+                <div>
+                    <div class="stat-label">Kamar Terisi</div>
+                    <h3 class="stat-value" id="occupiedRooms">—</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card">
+                <div class="stat-icon yellow"><span class="material-symbols-outlined">construction</span></div>
+                <div>
+                    <div class="stat-label">Maintenance</div>
+                    <h3 class="stat-value" id="maintenanceRooms">—</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <span class="material-symbols-outlined text-muted" style="font-size:18px">search</span>
+                        </span>
+                        <input type="text" id="searchRoom" class="form-control border-start-0" placeholder="Cari nomor atau tipe kamar...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="statusFilter" class="form-select">
+                        <option value="">Semua Status</option>
+                        <option value="AVAILABLE">Tersedia</option>
+                        <option value="OCCUPIED">Terisi</option>
+                        <option value="UNDER_MAINTENANCE">Maintenance</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-secondary w-100" onclick="loadRooms()">
+                        <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle">refresh</span> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert -->
+    <div id="alertBox" class="alert d-none mb-3" role="alert"></div>
+
+    <!-- Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-head">
+                        <tr>
+                            <th>No</th>
+                            <th>Nomor</th>
+                            <th>Tipe</th>
+                            <th>Harga</th>
+                            <th>Kapasitas</th>
+                            <th>Fasilitas</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roomTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center py-5 text-muted">
+                                <span class="material-symbols-outlined d-block mb-2" style="font-size:40px">hourglass_empty</span>
+                                Memuat data kamar...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== MODAL: TAMBAH KAMAR ===== -->
+<div class="modal fade" id="addRoomModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span class="material-symbols-outlined me-2" style="vertical-align:middle">add_home</span>Tambah Kamar Baru
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addRoomForm" novalidate>
+                <div class="modal-body">
+                    <div id="addAlert" class="alert alert-danger d-none mb-3"></div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Nomor Kamar <span class="text-danger">*</span></label>
+                            <input id="addRoomNumber" class="form-control" placeholder="Contoh: A-101"
+                                   maxlength="20" required>
+                            <div class="invalid-feedback">Nomor kamar wajib diisi (maks. 20 karakter).</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Tipe Kamar <span class="text-danger">*</span></label>
+                            <input id="addRoomType" class="form-control" placeholder="Contoh: Standard / Eksklusif"
+                                   maxlength="50" required>
+                            <div class="invalid-feedback">Tipe kamar wajib diisi (maks. 50 karakter).</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Harga / Bulan (Rp) <span class="text-danger">*</span></label>
+                            <input id="addPrice" type="number" class="form-control" placeholder="Contoh: 1500000"
+                                   min="50000" max="99999999" required>
+                            <div class="invalid-feedback">Harga harus antara Rp 50.000 – Rp 99.999.999.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Kapasitas (orang) <span class="text-danger">*</span></label>
+                            <input id="addCapacity" type="number" class="form-control" placeholder="Contoh: 1"
+                                   min="1" max="10" required>
+                            <div class="invalid-feedback">Kapasitas harus antara 1 – 10 orang.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Deskripsi</label>
+                            <textarea id="addDescription" class="form-control" rows="3" maxlength="500"
+                                      placeholder="Deskripsi singkat tentang kamar (maks. 500 karakter)"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Upload Gambar Kamar <span class="text-danger">*</span></label>
+                            <input type="file" id="addRoomImage" class="form-control" accept="image/*" required onchange="previewImage(this, 'addRoomImagePreview')">
+                            <div class="mt-2 text-center" style="display:none;" id="addRoomImagePreviewContainer">
+                                <img id="addRoomImagePreview" src="" alt="Preview" style="max-width: 100%; max-height: 200px; border-radius: 8px; object-fit: cover; border: 1px solid #ddd;">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Fasilitas</label>
+                            <div id="addFacilitiesContainer" class="row g-2 mb-2">
+                                <!-- Will be rendered dynamically via JS -->
+                            </div>
+                            <div class="input-group" style="max-width: 320px;">
+                                <input type="text" id="addCustomFacilityInput" class="form-control form-control-sm" placeholder="Nama fasilitas baru...">
+                                <button class="btn btn-outline-primary btn-sm" type="button" onclick="addCustomFacility('add')">Tambah</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn-add-room" onclick="createRoom()">
+                        <span id="addBtnText">Simpan Kamar</span>
+                        <span id="addBtnLoader" class="spinner-border spinner-border-sm d-none"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: EDIT KAMAR ===== -->
+<div class="modal fade" id="editRoomModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span class="material-symbols-outlined me-2" style="vertical-align:middle">edit_square</span>Edit Kamar
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editRoomForm" novalidate>
+                <div class="modal-body">
+                    <div id="editAlert" class="alert alert-danger d-none mb-3"></div>
+                    <input type="hidden" id="editRoomId">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Nomor Kamar <span class="text-danger">*</span></label>
+                            <input id="editRoomNumber" class="form-control" maxlength="20" required>
+                            <div class="invalid-feedback">Nomor kamar wajib diisi.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Tipe Kamar <span class="text-danger">*</span></label>
+                            <input id="editRoomType" class="form-control" maxlength="50" required>
+                            <div class="invalid-feedback">Tipe kamar wajib diisi.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Harga / Bulan (Rp) <span class="text-danger">*</span></label>
+                            <input id="editPrice" type="number" class="form-control" min="50000" max="99999999" required>
+                            <div class="invalid-feedback">Harga harus antara Rp 50.000 – Rp 99.999.999.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Kapasitas (orang) <span class="text-danger">*</span></label>
+                            <input id="editCapacity" type="number" class="form-control" min="1" max="10" required>
+                            <div class="invalid-feedback">Kapasitas harus antara 1 – 10 orang.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Deskripsi</label>
+                            <textarea id="editDescription" class="form-control" rows="3" maxlength="500"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Upload Gambar Baru (Opsional)</label>
+                            <input type="file" id="editRoomImage" class="form-control" accept="image/*" onchange="previewImage(this, 'editRoomImagePreview')">
+                            <div class="small text-muted mt-1" style="color: #BFA88A !important;">Biarkan kosong jika tidak ingin mengubah gambar.</div>
+                            <div class="mt-2 text-center" style="display:none;" id="editRoomImagePreviewContainer">
+                                <img id="editRoomImagePreview" src="" alt="Preview" style="max-width: 100%; max-height: 200px; border-radius: 8px; object-fit: cover; border: 1px solid #ddd;">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Fasilitas</label>
+                            <div id="editFacilitiesContainer" class="row g-2 mb-2">
+                                <!-- Will be rendered dynamically via JS -->
+                            </div>
+                            <div class="input-group" style="max-width: 320px;">
+                                <input type="text" id="editCustomFacilityInput" class="form-control form-control-sm" placeholder="Nama fasilitas baru...">
+                                <button class="btn btn-outline-primary btn-sm" type="button" onclick="addCustomFacility('edit')">Tambah</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn-add-room" onclick="updateRoom()">
+                        <span id="editBtnText">Simpan Perubahan</span>
+                        <span id="editBtnLoader" class="spinner-border spinner-border-sm d-none"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: KONFIRMASI HAPUS ===== -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-danger">
+                    <span class="material-symbols-outlined me-1" style="vertical-align:middle">delete_forever</span>Hapus Kamar
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center pb-0">
+                <p>Yakin ingin menghapus kamar <strong id="deleteRoomName"></strong>?<br>
+                <small class="text-muted">Tindakan ini tidak dapat dibatalkan.</small></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn" onclick="confirmDelete()">
+                    <span id="delBtnText">Ya, Hapus</span>
+                    <span id="delBtnLoader" class="spinner-border spinner-border-sm d-none"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index:2000">
+    <div id="liveToast" class="toast align-items-center border-0" role="alert" aria-live="assertive">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMsg">Pesan berhasil disimpan.</div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/rooms.js}"></script>
+</body>
+</html>

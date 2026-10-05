@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Admin — Smart Kost</title>
+  <meta name="description" content="Panel admin untuk manajemen kost Smart Kost"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/css/smartkost.css}"/>
+  <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="sk-layout">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sk-sidebar" id="sidebar">
+    <a href="/" class="sk-sidebar-brand" style="text-decoration: none; color: inherit;">
+      <div class="brand-icon"><span class="material-symbols-outlined">home</span></div>
+      <div>
+        <div class="brand-name">Smart Kost</div>
+        <div class="brand-sub">Management System</div>
+      </div>
+    </a>
+    <div class="sk-sidebar-role role-admin">⚙️ Administrator</div>
+
+    <ul class="sk-sidebar-nav">
+      <li class="nav-section">Menu Utama</li>
+      <li><a href="/dashboard/admin" class="active"><i class="fa-solid fa-hotel nav-icon"></i> <span class="nav-text">Dashboard</span></a></li>
+      <li><a href="#" onclick="showSection('rooms')"><i class="fa-solid fa-door-open nav-icon"></i> <span class="nav-text">Manajemen Kamar</span></a></li>
+      <li><a href="#" onclick="showSection('tenants')"><i class="fa-solid fa-users nav-icon"></i> <span class="nav-text">Data Penghuni</span></a></li>
+      <li><a href="#" onclick="showSection('payments')">
+        <i class="fa-solid fa-credit-card nav-icon"></i> <span class="nav-text">Pembayaran</span>
+        <span class="nav-badge" id="pendingBadge">0</span>
+      </a></li>
+      <li><a href="#" onclick="showSection('complaints')"><i class="fa-solid fa-circle-exclamation nav-icon"></i> <span class="nav-text">Komplain</span></a></li>
+      <li class="nav-section">Laporan</li>
+      <li><a href="#" onclick="showSection('reports')"><i class="fa-solid fa-chart-line nav-icon"></i> <span class="nav-text">Laporan Keuangan</span></a></li>
+    </ul>
+
+    <div class="sk-sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" id="sidebarAvatar">A</div>
+        <div>
+          <div class="user-name" id="sidebarName">Admin</div>
+          <div class="user-role">Administrator</div>
+        </div>
+        <button class="logout-btn material-symbols-outlined" onclick="doLogout()" title="Keluar">logout</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <div class="sk-main">
+
+    <!-- TOPBAR -->
+    <header class="sk-topbar">
+      <button class="sk-hamburger material-symbols-outlined" onclick="toggleSidebar()">menu</button>
+      <div>
+        <div class="sk-topbar-title" id="pageTitle">Dashboard Admin</div>
+        <div class="sk-topbar-sub" id="pageDate"></div>
+      </div>
+      <div class="sk-topbar-right">
+        <button class="sk-topbar-btn material-symbols-outlined" onclick="refreshAll()" title="Refresh">refresh</button>
+        <button class="sk-topbar-btn material-symbols-outlined" title="Notifikasi" id="notifBtn">
+          notifications
+          <span class="badge" id="notifBadge" style="display:none">0</span>
+        </button>
+        <div class="avatar-circle" id="topAvatar">A</div>
+      </div>
+    </header>
+
+    <main class="sk-page">
+
+      <!-- ===== SECTION: DASHBOARD ===== -->
+      <section id="sec-dashboard">
+
+        <!-- STAT CARDS -->
+        <div class="sk-stats-grid" id="statsGrid">
+          <div class="sk-stat-card">
+            <div class="sk-stat-icon brown"><span class="material-symbols-outlined">meeting_room</span></div>
+            <div>
+              <div class="sk-stat-label">Total Kamar</div>
+              <div class="sk-stat-value" id="statTotalRooms">—</div>
+              <div class="sk-stat-sub"><span class="material-symbols-outlined" style="font-size:14px">info</span> Semua unit</div>
+            </div>
+          </div>
+          <div class="sk-stat-card">
+            <div class="sk-stat-icon green"><span class="material-symbols-outlined">door_open</span></div>
+            <div>
+              <div class="sk-stat-label">Kamar Kosong</div>
+              <div class="sk-stat-value" id="statAvailRooms">—</div>
+              <div class="sk-stat-sub"><span class="up">●</span> Siap dihuni</div>
+            </div>
+          </div>
+          <div class="sk-stat-card">
+            <div class="sk-stat-icon blue"><span class="material-symbols-outlined">people</span></div>
+            <div>
+              <div class="sk-stat-label">Penghuni Aktif</div>
+              <div class="sk-stat-value" id="statActiveTenants">—</div>
+              <div class="sk-stat-sub">Tenant terdaftar</div>
+            </div>
+          </div>
+          <div class="sk-stat-card">
+            <div class="sk-stat-icon yellow"><span class="material-symbols-outlined">pending_actions</span></div>
+            <div>
+              <div class="sk-stat-label">Pembayaran Pending</div>
+              <div class="sk-stat-value" id="statPending">—</div>
+              <div class="sk-stat-sub"><span class="down">●</span> Perlu verifikasi</div>
+            </div>
+          </div>
+          <div class="sk-stat-card">
+            <div class="sk-stat-icon brown"><span class="material-symbols-outlined">attach_money</span></div>
+            <div>
+              <div class="sk-stat-label">Pendapatan Bulan Ini</div>
+              <div class="sk-stat-value" id="statIncome" style="font-size:20px">—</div>
+              <div class="sk-stat-sub">Pembayaran terverifikasi</div>
+            </div>
+          </div>
+          <div class="sk-stat-card">
+            <div class="sk-stat-icon red"><span class="material-symbols-outlined">warning</span></div>
+            <div>
+              <div class="sk-stat-label">Tunggakan</div>
+              <div class="sk-stat-value" id="statOverdue">—</div>
+              <div class="sk-stat-sub"><span class="down">●</span> Perlu tindakan</div>
+            </div>
+          </div>
+          <div class="sk-stat-card">
+            <div class="sk-stat-icon red"><span class="material-symbols-outlined">support_agent</span></div>
+            <div>
+              <div class="sk-stat-label">Komplain Aktif</div>
+              <div class="sk-stat-value" id="statComplaints">—</div>
+              <div class="sk-stat-sub">Belum diselesaikan</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS + QUICK TABLE -->
+        <div class="sk-grid-2" style="gap:24px">
+          <div class="sk-card">
+            <div class="sk-card-header">
+              <span class="material-symbols-outlined" style="color:var(--primary)">bar_chart</span>
+              <div>
+                <div class="sk-card-title">Pendapatan Bulanan</div>
+                <div class="sk-card-sub">6 bulan terakhir</div>
+              </div>
+            </div>
+            <div class="sk-card-body">
+              <canvas id="incomeChart" class="mini-chart"></canvas>
+            </div>
+          </div>
+          <div class="sk-card">
+            <div class="sk-card-header">
+              <span class="material-symbols-outlined" style="color:var(--primary)">donut_large</span>
+              <div>
+                <div class="sk-card-title">Status Kamar</div>
+                <div class="sk-card-sub">Distribusi hunian</div>
+              </div>
+            </div>
+            <div class="sk-card-body">
+              <canvas id="roomChart" class="mini-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </section><!-- end sec-dashboard -->
+
+      <!-- ===== SECTION: PAYMENTS ===== -->
+      <section id="sec-payments" style="display:none">
+        <div class="sk-card">
+          <div class="sk-card-header">
+            <span class="material-symbols-outlined" style="color:var(--primary)">payments</span>
+            <div>
+              <div class="sk-card-title">Semua Pembayaran</div>
+              <div class="sk-card-sub">Verifikasi pembayaran penghuni</div>
+            </div>
+            <div class="sk-card-actions">
+              <button class="filter-chip active" onclick="filterPayments('ALL',this)">Semua</button>
+              <button class="filter-chip" onclick="filterPayments('WAITING_CONFIRMATION',this)">Pending</button>
+              <button class="filter-chip" onclick="filterPayments('PAID',this)">Disetujui</button>
+            </div>
+          </div>
+          <div class="sk-table-wrap">
+            <table class="sk-table">
+              <thead>
+                <tr><th>#</th><th>Tenant ID</th><th>Kamar ID</th><th>Nominal</th><th>Metode</th><th>Tanggal</th><th>Status</th><th>Bukti</th><th>Aksi</th></tr>
+              </thead>
+              <tbody id="allPaymentTable">
+                <tr><td colspan="9"><div class="sk-empty"><div class="empty-icon">💳</div><p>Memuat data...</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SECTION: COMPLAINTS ===== -->
+      <section id="sec-complaints" style="display:none">
+        <div class="sk-card">
+          <div class="sk-card-header">
+            <i class="fa-solid fa-circle-exclamation" style="color:var(--primary); font-size:18px"></i>
+            <div>
+              <div class="sk-card-title">Manajemen Komplain</div>
+              <div class="sk-card-sub">Kelola dan tanggapi keluhan/komplain dari penghuni</div>
+            </div>
+          </div>
+          <div class="sk-table-wrap">
+            <table class="sk-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tenant ID</th>
+                  <th>Kamar ID</th>
+                  <th>Judul</th>
+                  <th>Deskripsi</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="allComplaintsTable">
+                <tr>
+                  <td colspan="7">
+                    <div class="sk-empty">
+                      <div class="empty-icon"><i class="fa-solid fa-hourglass"></i></div>
+                      <p>Memuat komplain...</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SECTION: ROOMS ===== -->
+      <section id="sec-rooms" style="display:none">
+        <div class="sk-card">
+          <div class="sk-card-header">
+            <span class="material-symbols-outlined" style="color:var(--primary)">meeting_room</span>
+            <div>
+              <div class="sk-card-title">Manajemen Kamar</div>
+            </div>
+            <div class="sk-card-actions">
+              <a href="/admin/rooms" class="sk-btn sk-btn-primary sk-btn-sm">
+                <span class="material-symbols-outlined" style="font-size:14px">open_in_new</span> Kelola Kamar
+              </a>
+            </div>
+          </div>
+          <div class="sk-card-body">
+            <div id="adminRoomsContainer">
+              <div class="sk-empty"><div class="empty-icon"><span class="material-symbols-outlined">hotel</span></div><p>Memuat daftar kamar...</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SECTION: TENANTS ===== -->
+      <section id="sec-tenants" style="display:none">
+        <div class="sk-card">
+          <div class="sk-card-header">
+            <i class="fa-solid fa-users" style="color:var(--primary); font-size:18px"></i>
+            <div>
+              <div class="sk-card-title">Data Penghuni Aktif</div>
+              <div class="sk-card-sub">Manajemen penghuni dan status sewa unit</div>
+            </div>
+          </div>
+          <div class="sk-table-wrap">
+            <table class="sk-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nama</th>
+                  <th>Kamar ID</th>
+                  <th>Telepon</th>
+                  <th>Email</th>
+                  <th>Mulai</th>
+                  <th>Selesai</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="allTenantsTable">
+                <tr>
+                  <td colspan="8">
+                    <div class="sk-empty">
+                      <div class="empty-icon"><i class="fa-solid fa-hourglass"></i></div>
+                      <p>Memuat data penghuni...</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SECTION: REPORTS ===== -->
+      <section id="sec-reports" style="display:none">
+        <div class="sk-card">
+          <div class="sk-card-header">
+            <span class="material-symbols-outlined" style="color:var(--primary)">bar_chart</span>
+            <div>
+              <div class="sk-card-title">Laporan Keuangan</div>
+            </div>
+            <div class="sk-card-actions">
+              <button class="sk-btn sk-btn-primary sk-btn-sm" onclick="downloadPaymentsReport()">
+                <span class="material-symbols-outlined" style="font-size:14px">download</span> Export Excel
+              </button>
+            </div>
+          </div>
+          <div class="sk-card-body">
+                <div id="reportContent" class="report-grid">
+                  <div class="sk-empty"><div class="empty-icon">📊</div><p>Laporan keuangan detail akan segera hadir.</p></div>
+                </div>
+          </div>
+        </div>
+      </section>
+
+
+
+    </main>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="sk-toast-container" id="toastContainer"></div>
+
+<!-- IMAGE PREVIEW MODAL -->
+<div class="sk-modal-overlay" id="imgModal">
+  <div class="sk-modal" style="max-width:400px">
+    <div class="sk-modal-header">
+      <span class="material-symbols-outlined" style="color:var(--primary)">image</span>
+      <span class="sk-modal-title">Bukti Pembayaran</span>
+      <button class="sk-modal-close" onclick="closeModal('imgModal')">close</button>
+    </div>
+    <div class="sk-modal-body" style="padding:16px;text-align:center">
+      <img id="modalImg" src="" alt="Bukti Pembayaran" style="max-width:100%;border-radius:var(--radius-md)"/>
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/js/admin-dashboard.js}"></script>
+</body>
+</html>

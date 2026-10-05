@@ -1,0 +1,11 @@
+.payment-layout { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+.qris-box { background: #fff; border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 24px; }
+.qris-img { width: 220px; height: 220px; object-fit: contain; margin: 16px auto; border: 1px solid var(--border-light); padding: 8px; border-radius: var(--radius-sm); }
+.file-drop {
+  border: 2px dashed var(--primary-light); background: var(--primary-soft);
+  padding: 32px 20px; border-radius: var(--radius-md); text-align: center;
+  cursor: pointer; transition: all var(--transition);
+}
+.file-drop:hover { background: #fdf6ee; border-color: var(--primary); }
+.file-drop .material-symbols-outlined { font-size: 40px; color: var(--primary); margin-bottom: 10px; }
+#previewImg { max-width: 100%; max-height: 200px; border-radius: var(--radius-sm); margin-top: 16px; display: none; }

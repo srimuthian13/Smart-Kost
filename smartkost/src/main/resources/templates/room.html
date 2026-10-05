@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Room Management | Smart Kost</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#141d23",
+                        "on-primary-container": "#ffffff",
+                        "inverse-on-surface": "#eff0fc",
+                        "on-secondary-fixed-variant": "#3f484f",
+                        "primary": "#0057cd",
+                        "secondary-fixed": "#dbe4ed",
+                        "surface-dim": "#d8d9e5",
+                        "on-tertiary-fixed": "#370e00",
+                        "on-secondary": "#ffffff",
+                        "surface": "#faf8ff",
+                        "on-primary-fixed-variant": "#00419e",
+                        "secondary-fixed-dim": "#bfc8d0",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e1e2ee",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-tertiary-container": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "background": "#faf8ff",
+                        "primary-fixed": "#dae2ff",
+                        "primary-container": "#0d6efd",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#faf8ff",
+                        "on-surface-variant": "#424655",
+                        "tertiary-fixed-dim": "#ffb599",
+                        "secondary": "#575f67",
+                        "on-secondary-container": "#5b646b",
+                        "surface-container": "#ecedf9",
+                        "surface-container-low": "#f2f3ff",
+                        "outline-variant": "#c2c6d8",
+                        "inverse-primary": "#b1c5ff",
+                        "surface-container-high": "#e6e7f3",
+                        "on-surface": "#191b24",
+                        "tertiary": "#a63b00",
+                        "inverse-surface": "#2d3039",
+                        "secondary-container": "#d8e1ea",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#7f2b00",
+                        "surface-tint": "#0057ce",
+                        "tertiary-container": "#cf4b00",
+                        "outline": "#727787",
+                        "surface-container-highest": "#e1e2ee",
+                        "primary-fixed-dim": "#b1c5ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001946",
+                        "on-background": "#191b24"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "spacer-4": "1.5rem",
+                        "gutter": "1.5rem",
+                        "sidebar-width": "280px",
+                        "spacer-2": "0.5rem",
+                        "spacer-5": "3rem",
+                        "spacer-3": "1rem",
+                        "spacer-1": "0.25rem",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-xs": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h2": ["Inter"],
+                        "label-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "h4": ["Inter"],
+                        "h1": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["1.125rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-xs": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.025em", "fontWeight": "500"}],
+                        "body-md": ["1rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h2": ["2rem", {"lineHeight": "1.25", "fontWeight": "600"}],
+                        "label-md": ["0.875rem", {"lineHeight": "1", "fontWeight": "600"}],
+                        "h3": ["1.5rem", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-sm": ["0.875rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h4": ["1.25rem", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "h1": ["2.5rem", {"lineHeight": "1.2", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm fixed top-0 w-full z-50">
+<div class="flex justify-between items-center px-gutter h-16 w-full max-w-container-max-width mx-auto">
+<div class="flex items-center gap-spacer-3">
+<span class="material-symbols-outlined text-primary lg:hidden cursor-pointer">menu</span>
+<h1 class="font-h3 text-h3 text-primary dark:text-inverse-primary tracking-tight">Smart Kost</h1>
+</div>
+<div class="flex items-center gap-spacer-4">
+<div class="hidden md:flex items-center gap-spacer-4">
+<span class="text-on-surface-variant dark:text-surface-variant cursor-pointer hover:text-primary transition-colors font-label-md text-label-md">Support</span>
+<span class="text-on-surface-variant dark:text-surface-variant cursor-pointer hover:text-primary transition-colors font-label-md text-label-md">Docs</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Close up professional headshot of a friendly male property manager in his late 30s, wearing a clean white shirt, against a soft-focus office background with warm afternoon sunlight. High-end corporate photography style with natural lighting and sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkw3rB-CVi_NeKRXRXp2erPCIkDa-RT88_XJbX3hMYXrVGdtszo-_M6qb_ksLl5mCL1_WsE-BhYVRiR-Wa3FvOkoBJBpPd3kFWyCLJyvSqqVRlNtW0jvUt9FnhLxM-0gW8hMygGgCYMfP9TZqHD_7_ql76xTcUo5MldBLAoDYIWZb3Sb7vdjurBaHFPinGdQCXaPdTpLgWlCRXAVqrtdgLc2yhYrnoCUU8sIhKKyegpgQm7w5kbJpDbn01Lz470ISb9ZCL1s1oNCqp"/>
+</div>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer (Desktop) -->
+<aside class="fixed left-0 top-0 h-full w-sidebar-width border-r border-outline-variant dark:border-outline bg-surface dark:bg-inverse-surface shadow-sm hidden lg:flex flex-col py-spacer-4 gap-spacer-2 pt-20">
+<div class="px-gutter mb-spacer-4">
+<h2 class="font-h4 text-h4 text-primary">Admin Panel</h2>
+</div>
+<nav class="flex flex-col px-spacer-2">
+<a class="flex items-center gap-spacer-3 px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-spacer-3 px-gutter py-3 bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary border-l-4 border-primary rounded-r-lg transition-all" href="#">
+<span class="material-symbols-outlined">door_front</span>
+<span class="font-label-md text-label-md">Rooms</span>
+</a>
+<a class="flex items-center gap-spacer-3 px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Tenants</span>
+</a>
+<a class="flex items-center gap-spacer-3 px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">payments</span> 
+<span class="font-label-md text-label-md">Payments</span>
+</a>
+<a class="flex items-center gap-spacer-3 px-gutter py-3 text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="font-label-md text-label-md">Complaints</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-sidebar-width pt-20 pb-24 lg:pb-10 px-gutter transition-all duration-300">
+<div class="max-w-container-max-width mx-auto">
+<!-- Page Header Section -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-spacer-3 mb-spacer-5">
+<div>
+<h2 class="font-h2 text-h2 text-on-surface">Room Management</h2>
+<p class="text-on-surface-variant font-body-md text-body-md">Monitor, update, and organize property units.</p>
+</div>
+<div class="flex gap-spacer-2">
+<button class="flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-xl font-label-md text-label-md hover:bg-opacity-90 transition-all shadow-md active:scale-95" id="addRoomBtn">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        Add New Room
+                    </button>
+</div>
+</div>
+<!-- Dashboard Stats (Small Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-spacer-5">
+<div class="bg-surface-container-lowest p-spacer-4 rounded-xl border border-outline-variant flex items-center gap-4 shadow-sm">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">apartment</span>
+</div>
+<div>
+<p class="text-label-xs font-label-xs text-on-surface-variant uppercase tracking-wider">Total Rooms</p>
+<h3 class="text-h3 font-h3">48</h3>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-spacer-4 rounded-xl border border-outline-variant flex items-center gap-4 shadow-sm">
+<div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-700">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="text-label-xs font-label-xs text-on-surface-variant uppercase tracking-wider">Occupied</p>
+<h3 class="text-h3 font-h3">32</h3>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-spacer-4 rounded-xl border border-outline-variant flex items-center gap-4 shadow-sm">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">door_open</span>
+</div>
+<div>
+<p class="text-label-xs font-label-xs text-on-surface-variant uppercase tracking-wider">Vacant</p>
+<h3 class="text-h3 font-h3">16</h3>
+</div>
+</div>
+</div>
+<!-- Room Data Table / Management Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<!-- Table Controls -->
+<div class="p-spacer-4 border-b border-outline-variant flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-body-sm text-body-sm" placeholder="Search by room number or type..." type="text"/>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+<select class="bg-surface-container border border-outline-variant rounded-lg px-3 py-2 font-label-md text-label-md outline-none">
+<option>All Status</option>
+<option>Occupied</option>
+<option>Vacant</option>
+<option>Maintenance</option>
+</select>
+<button class="bg-surface-container border border-outline-variant px-3 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-high flex items-center gap-1 transition-all">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Filter
+                        </button>
+</div>
+</div>
+<!-- Desktop Table View -->
+<div class="hidden md:block overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Room</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Type</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Status</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Price</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase">Tenant</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant" id="roomTableBody">
+<!-- Rows injected via JS -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4 font-label-md">Room 101</td>
+<td class="px-6 py-4 text-on-surface-variant font-body-sm">Deluxe King</td>
+<td class="px-6 py-4">
+<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center w-fit gap-1">
+<span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                        Occupied
+                                    </span>
+</td>
+<td class="px-6 py-4 font-body-sm">$450/mo</td>
+<td class="px-6 py-4 text-on-surface-variant font-body-sm">John Doe</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-all" title="Edit Room">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-lg transition-all" title="Vacate Room">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+</button>
+<button class="p-2 text-error hover:bg-error/10 rounded-lg transition-all" title="Delete Room">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Repeat standard row for aesthetic -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4 font-label-md">Room 102</td>
+<td class="px-6 py-4 text-on-surface-variant font-body-sm">Standard Single</td>
+<td class="px-6 py-4">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold flex items-center w-fit gap-1">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                        Vacant
+                                    </span>
+</td>
+<td class="px-6 py-4 font-body-sm">$300/mo</td>
+<td class="px-6 py-4 text-on-surface-variant font-body-sm italic opacity-50">—</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-all">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-all">
+<span class="material-symbols-outlined text-[20px]">login</span>
+</button>
+<button class="p-2 text-error hover:bg-error/10 rounded-lg transition-all">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Mobile Card View -->
+<div class="md:hidden divide-y divide-outline-variant">
+<div class="p-spacer-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h4 class="font-h4 text-h4">Room 101</h4>
+<p class="text-body-sm text-on-surface-variant">Deluxe King</p>
+</div>
+<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Occupied</span>
+</div>
+<div class="flex justify-between items-center mt-4">
+<span class="font-label-md text-primary">$450/mo</span>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-lg"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 border border-outline-variant rounded-lg"><span class="material-symbols-outlined text-error">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="p-spacer-4 border-t border-outline-variant flex items-center justify-between">
+<p class="text-label-xs text-on-surface-variant">Showing 1-10 of 48 rooms</p>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-lg disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="px-3 py-1 bg-primary text-on-primary rounded-lg font-label-md">1</button>
+<button class="px-3 py-1 hover:bg-surface-container rounded-lg font-label-md">2</button>
+<button class="px-3 py-1 hover:bg-surface-container rounded-lg font-label-md">3</button>
+<button class="p-2 border border-outline-variant rounded-lg">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 lg:hidden border-t border-outline-variant dark:border-outline bg-surface/90 backdrop-blur-md shadow-lg flex justify-around items-center h-16 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant tap-highlight-transparent active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-xs text-label-xs">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary font-bold tap-highlight-transparent active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">bed</span>
+<span class="font-label-xs text-label-xs">Rooms</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant tap-highlight-transparent active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-xs text-label-xs">Payments</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant tap-highlight-transparent active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-xs text-label-xs">Profile</span>
+</a>
+</nav>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center backdrop-blur-sm px-4" id="modalOverlay">
+<div class="bg-surface-container-lowest w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden scale-95 transition-transform duration-300" id="modalContent">
+<div class="p-spacer-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-h3 text-h3 text-on-surface">Add New Room</h3>
+<button class="p-2 hover:bg-surface-container rounded-full" id="closeModal">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-gutter space-y-4">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Room Number</label>
+<input class="w-full p-3 bg-surface-container border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. 101" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Room Type</label>
+<select class="w-full p-3 bg-surface-container border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary outline-none">
+<option>Standard Single</option>
+<option>Deluxe King</option>
+<option>Executive Suite</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Monthly Price</label>
+<input class="w-full p-3 bg-surface-container border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary outline-none" placeholder="450" type="number"/>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Description</label>
+<textarea class="w-full p-3 bg-surface-container border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary outline-none" placeholder="Additional details..." rows="3"></textarea>
+</div>
+</div>
+<div class="p-gutter pt-0 flex gap-spacer-2">
+<button class="flex-1 py-3 bg-primary text-on-primary rounded-xl font-h4 shadow-md hover:bg-opacity-90 active:scale-95 transition-all">Save Room</button>
+<button class="px-6 py-3 border border-outline-variant rounded-xl font-label-md hover:bg-surface-container transition-all" id="cancelModal">Cancel</button>
+</div>
+</div>
+</div>
+<!-- Background Decoration (Soft Ambient) -->
+<div class="fixed top-0 right-0 -z-10 opacity-30 pointer-events-none">
+
+</div>
+<script>
+        // Micro-interactions and Modal Logic
+        const addRoomBtn = document.getElementById('addRoomBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalContent = document.getElementById('modalContent');
+        const closeModal = document.getElementById('closeModal');
+        const cancelModal = document.getElementById('cancelModal');
+
+        const toggleModal = (show) => {
+            if (show) {
+                modalOverlay.classList.remove('hidden');
+                modalOverlay.classList.add('flex');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            } else {
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                modalContent.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modalOverlay.classList.add('hidden');
+                    modalOverlay.classList.remove('flex');
+                }, 200);
+            }
+        };
+
+        addRoomBtn.addEventListener('click', () => toggleModal(true));
+        closeModal.addEventListener('click', () => toggleModal(false));
+        cancelModal.addEventListener('click', () => toggleModal(false));
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) toggleModal(false);
+        });
+
+        // Mock Fetch Logic for Room Data
+        async function fetchRooms() {
+            // Note: This matches the room.js request logic mentioned in prompt
+            // console.log("Fetching from /api/rooms...");
+            // In a real environment:
+            // const res = await fetch('/api/rooms');
+            // const data = await res.json();
+            // renderRooms(data);
+        }
+
+        // Initialize view
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRooms();
+        });
+    </script>
+</body></html>
